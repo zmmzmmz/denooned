@@ -1,13 +1,19 @@
 import { Router } from "https://deno.land/x/oak@v10.6.0/mod.ts";
+import {renderFile} from "https://deno.land/x/eta@v1.12.3/mod.ts";
 
 const router = new Router();
 
+// 首页
 router.get('/', async (ctx) => {
-  await ctx.send({
-    root: `${Deno.cwd()}/templates`,
-    index: 'index.html',
-  })
+  const res = await renderFile('./index.html', {}) || '';
+  ctx.response.body = res;
 });
+
+// 容器路径
+router.get('/page/:path', async (ctx) => {
+  const res = await renderFile('./container.html', { name: 903 }) || '';
+  ctx.response.body = res;
+})
 
 
 export default router;
