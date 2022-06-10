@@ -40,13 +40,13 @@ interface PartialConfigWithFilename extends Partial<EtaConfig> {
  * @param noCache Optionally, make Eta not cache the template
  */
 
-export function loadFile(
+export async function loadFile(
   filePath: string,
   options: PartialConfigWithFilename,
   noCache?: boolean,
-): TemplateFunction {
+): Promise<TemplateFunction> {
   const config = getConfig(options);
-  const template = readFile(filePath);
+  const template = await readFile(filePath);
   try {
     const compiledTemplate = compile(template, config);
     if (!noCache) {
@@ -72,7 +72,7 @@ export function loadFile(
  * @return Eta template function
  */
 
-function handleCache(options: EtaConfigWithFilename): TemplateFunction {
+async function handleCache(options: EtaConfigWithFilename): Promise<TemplateFunction> {
   const filename = options.filename;
 
   if (options.cache) {
@@ -81,11 +81,11 @@ function handleCache(options: EtaConfigWithFilename): TemplateFunction {
       return func;
     }
 
-    return loadFile(filename, options);
+    return await loadFile(filename, options);
   }
 
   // Caching is disabled, so pass noCache = true
-  return loadFile(filename, options, true);
+  return await loadFile(filename, options, true);
 }
 
 /**
@@ -98,8 +98,8 @@ function handleCache(options: EtaConfigWithFilename): TemplateFunction {
  * @param cb callback
  */
 
-function tryHandleCache(
-  data: object,
+async function tryHandleCache(
+  data: Object,
   options: EtaConfigWithFilename,
   cb: CallbackFn | undefined,
 ) {
@@ -107,7 +107,7 @@ function tryHandleCache(
     try {
       // Note: if there is an error while rendering the template,
       // It will bubble up and be caught here
-      const templateFn = handleCache(options);
+      const templateFn = await handleCache(options);
       templateFn(data, options, cb);
     } catch (err) {
       return cb(err);
@@ -116,9 +116,9 @@ function tryHandleCache(
     // No callback, try returning a promise
     if (typeof promiseImpl === "function") {
       return new promiseImpl<string>(
-        function (resolve: Function, reject: Function) {
+        async function (resolve, reject) {
           try {
-            const templateFn = handleCache(options);
+            const templateFn = await handleCache(options);
             const result = templateFn(data, options);
             resolve(result);
           } catch (err) {
@@ -161,7 +161,7 @@ async function includeFile(
     options,
   );
   // TODO: make sure properties are currectly copied over
-  return [handleCache(newFileOptions as EtaConfigWithFilename), newFileOptions];
+  return [await handleCache(newFileOptions as EtaConfigWithFilename), newFileOptions];
 }
 
 /**
@@ -260,7 +260,7 @@ async function renderFile(
   // This will first try to resolve the file path (see getPath for details)
   renderConfig.filename = await getPath(filename, renderConfig);
 
-  return tryHandleCache(data, renderConfig, callback);
+  return await tryHandleCache(data, renderConfig, callback);
 }
 
 /**

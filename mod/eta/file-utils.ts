@@ -1,4 +1,4 @@
-import { exists, path, readFileSync } from "./file-methods.ts";
+import { exists, path, readFileSync, readFileAsync } from "./file-methods.ts";
 const _BOM = /^\uFEFF/;
 
 // express is set like: app.engine('html', require('eta').renderFile)
@@ -188,9 +188,10 @@ async function getPath(path: string, options: EtaConfig): Promise<string> {
  * Reads a file synchronously
  */
 
-function readFile(filePath: string): string {
+async function readFile(filePath: string): Promise<string> {
   try {
-    return readFileSync(filePath).toString().replace(_BOM, "") // TODO: is replacing BOM's necessary?
+    const res = await readFileAsync(filePath);
+    return res.toString().replace(_BOM, "") // TODO: is replacing BOM's necessary?
     ;
   } catch {
     throw EtaErr("Failed to read template at '" + filePath + "'");
