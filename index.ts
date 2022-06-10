@@ -8,7 +8,8 @@ const app = new Application();
 const viewPath = `${Deno.cwd()}/templates/`
 configure({
   views: viewPath,
-  tags: ['{{', '}}']
+  tags: ['{{', '}}'],
+  async: true
 })
 
 // api routes
