@@ -1,5 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v10.6.0/mod.ts";
-import {renderFile} from "https://deno.land/x/eta@v1.12.3/mod.ts";
+import {renderFile} from "../mod/eta/mod.ts";
 
 const router = new Router();
 
