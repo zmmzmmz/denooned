@@ -5,8 +5,36 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
+  <link rel="stylesheet" href="https://cdn.uecode.cc/assets/Giment/webcontainer-core/css/index.css">
+  <script>
+    window.g_config = {
+        onlinePages: [
+          {
+            name: 'page-manager',
+            path: '/page/manager',
+            title: '管理员',
+            type: 'sourcecode',
+            url: [
+              'https://g.alicdn.com/bzb-westeros/biz-activity-manager/1.0.19/js/index.js',
+              'https://g.alicdn.com/bzb-westeros/biz-activity-manager/1.0.19/css/index.css',
+            ]
+          },
+          {
+            name: 'product-planning',
+            title: '产品介绍',
+            path: '/page/product-planning',
+            type: 'sourcecode',
+            url: [
+              'https://g.alicdn.com/bzb-westeros/biz-new-product-planning/0.0.31/js/index.js',
+              'https://g.alicdn.com/bzb-westeros/biz-new-product-planning/0.0.31/css/index.css',
+            ]
+          },
+        ]
+      }
+  </script>
 </head>
 <body>
-  <div>container {{name}}</div>
+  <div id="root-container"></div>
+  <script src="https://cdn.uecode.cc/assets/Giment/webcontainer-core/js/index.js"></script>
 </body>
 </html>

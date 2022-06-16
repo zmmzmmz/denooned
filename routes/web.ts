@@ -5,7 +5,9 @@ const router = new Router();
 
 // 首页
 router.get('/', async (ctx) => {
-  const res = await renderFile(`${Deno.cwd()}/templates/index.html`, {}) || '';
+  const res = await renderFile(`${Deno.cwd()}/templates/container.html`, {
+    title: '首页',
+  }) || '';
   ctx.response.body = res;
 });
 

@@ -13,23 +13,22 @@ app.use(WebRoute.routes());
 app.use(WebRoute.allowedMethods());
 
 // 微前端容器
-app.use(async (ctx, next) => {
-  const { pathname } = ctx.request.url;
-  if (pathname.startsWith('/page')) {
-    const result = await getPageByPath(pathname);
-    if (!result.success || !result.data) {
-      ctx.response.status = Status.NotFound;
-      ctx.response.body = 'Not Found';
-      return;
-    }
-    const { name } = result.data;
-    const res =
-      (await renderFile(`${Deno.cwd()}/templates/container.html`, {
-        title: name,
-      })) || '';
-    return (ctx.response.body = res);
-  }
-  await next();
+app.use(async (ctx) => {
+  // const { pathname } = ctx.request.url;
+  // const result = await getPageByPath(pathname);
+  // let name: string = '';
+  // if (result.success) {
+  //   name = result.data?.name || '';
+  // }
+  // // if (!result.success || !result.data) {
+  // //   ctx.response.status = Status.NotFound;
+  // //   ctx.response.body = 'Not Found';
+  // //   return;
+  // // }
+  // name = result.data;
+  const res =
+    (await renderFile(`${Deno.cwd()}/templates/container.html`, {})) || '';
+  return (ctx.response.body = res);
 });
 
 await app.listen({ port: 8000 });
